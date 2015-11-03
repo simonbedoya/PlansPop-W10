@@ -1,0 +1,105 @@
+﻿<Page
+    x:Class="PlansPop.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PlansPop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:models="using:PlansPop.Models">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <SplitView
+            x:Name="split"
+            DisplayMode="CompactInline"
+            IsPaneOpen="True"
+            OpenPaneLength="280"
+            CompactPaneLength="50"
+            PaneBackground="#333333"
+            >
+            <SplitView.Pane>
+                <StackPanel>
+                    <Button Width="50" Height="50" Click="click"
+                            >
+                        <StackPanel>
+                            <Rectangle Fill="White" Width="25" Height="3" Margin="0,0,0,4"/>
+                            <Rectangle Fill="White" Width="25" Height="3" Margin="0,0,0,4"/>
+                            <Rectangle Fill="White" Width="25" Height="3" Margin="0,0,0,4"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <RelativePanel x:Name="profile" Height="120" Background="Gray">
+                        <Ellipse 
+                            Width="50" Height="50"
+                            Margin="20 5 0 0">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="http://theaudiophilegroup.ky/wp-content/uploads/2014/06/person-icon.png"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <Button                            
+                            RelativePanel.AlignTopWithPanel="True"
+                            RelativePanel.AlignRightWithPanel="True"
+                            Margin="10"
+                            Background="Gray">
+                            <SymbolIcon Symbol="Setting" Foreground="White"/>
+                        </Button>
+                        <TextBlock 
+                            x:Name="email"
+                            Text="example@example.com.co" 
+                            Foreground="White"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Margin="15 0 0 5"
+                            FontSize="12"/>
+                        <TextBlock 
+                            x:Name="name"
+                            Text="Example example example" 
+                            Foreground="White"
+                            RelativePanel.Above="email"
+                            Margin="15 0 0 1"/>
+                    </RelativePanel>
+                    
+                    <ListBox x:Name="menu"
+                             ItemsSource="{x:Bind MenuList}"
+                             Background="Transparent"
+                              Margin="0" Padding="0"
+                             ItemContainerStyle="{StaticResource MenuItemStyle}" SelectionChanged="selection"
+                             >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:MenuItem">
+                                <StackPanel Orientation="Horizontal">
+                                    <SymbolIcon Symbol="{x:Bind Icon}" Width="50" Height="50" 
+                                                Foreground="White"/>
+                                    <TextBlock Text="{x:Bind Name}" VerticalAlignment="Center"
+                                               Foreground="LightGray"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Rectangle Height="1" Fill="white" Margin="10"/>
+                    <Button Height="50" Width="280"
+                            Padding="0"
+                            Background="Transparent"
+                            BorderThickness="0" Click="logout"
+                            >
+                        
+                        <Button.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Width="280" Margin="-2 0 0 0">
+                                <SymbolIcon Symbol="Cancel" Width="50" Height="50" 
+                                                Foreground="White"/>
+                                <TextBlock Text="Cerrar Sesión" VerticalAlignment="Center"
+                                               Foreground="LightGray"/>
+                            </StackPanel>
+                        </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                </StackPanel>
+                
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Frame x:Name="MainFrame"/>
+            </SplitView.Content>
+        </SplitView>
+        
+    </Grid>
+</Page>

@@ -1,0 +1,53 @@
+﻿<Page
+    x:Class="PlansPop.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PlansPop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <RelativePanel>
+            <StackPanel 
+                Background="AntiqueWhite" 
+                Width="450" 
+                Height="300" 
+                RelativePanel.AlignHorizontalCenterWithPanel="True"
+                RelativePanel.AlignVerticalCenterWithPanel="True"
+                Orientation="Vertical"
+                >
+                    <TextBlock
+                        x:Name="Title"
+                        Text="Plans Pop"
+                        HorizontalAlignment="Center"
+                        FontSize="40"
+                        Foreground="Black"
+                        Margin="10"
+                        /> 
+                    <TextBox
+                        x:Name="user"
+                        PlaceholderText="Usuario"
+                        FontSize="20"
+                        Margin="60 10 60 30"
+                        />
+                    <TextBox
+                        x:Name="pass"
+                        PlaceholderText="Contraseña"
+                        FontSize="20"
+                        Margin="60 10 60 30"
+                        />
+                    <Button 
+                        Content="Login"
+                        Width="100"
+                        HorizontalAlignment="Center" Click="Login"
+                        />
+            </StackPanel>
+
+        </RelativePanel>
+
+
+
+    </Grid>
+</Page>
