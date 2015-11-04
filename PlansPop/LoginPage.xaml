@@ -7,47 +7,110 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="#0c3d7b">
 
         <RelativePanel>
             <StackPanel 
-                Background="AntiqueWhite" 
+                Background="White" 
                 Width="450" 
-                Height="300" 
+                Height="330" 
                 RelativePanel.AlignHorizontalCenterWithPanel="True"
                 RelativePanel.AlignVerticalCenterWithPanel="True"
                 Orientation="Vertical"
+                CornerRadius="20"
                 >
-                    <TextBlock
+                    <Image
                         x:Name="Title"
-                        Text="Plans Pop"
+                        Source="/Assets/Logo_login.png"
                         HorizontalAlignment="Center"
-                        FontSize="40"
-                        Foreground="Black"
-                        Margin="10"
-                        /> 
-                    <TextBox
-                        x:Name="user"
-                        PlaceholderText="Usuario"
-                        FontSize="20"
-                        Margin="60 10 60 30"
-                        />
-                    <TextBox
-                        x:Name="pass"
-                        PlaceholderText="Contraseña"
-                        FontSize="20"
-                        Margin="60 10 60 30"
-                        />
-                    <Button 
-                        Content="Login"
                         Width="100"
-                        HorizontalAlignment="Center" Click="Login"
+                        Margin="10"
                         />
+                <StackPanel Orientation="Horizontal" 
+                            Width="300"
+                            Margin="0 15 0 0"
+                            >
+                    <SymbolIcon Symbol="Contact"
+                                Width="30"
+                                Height="30"
+                                VerticalAlignment="Center"
+                                Margin="0 0 5 0"
+                                Foreground="#1942D7"/>
+                    <TextBox x:Name="user"
+                             PlaceholderText="Usuario"                             
+                             Width="250"
+                             BorderThickness="0.5"
+                             BorderBrush="#0c3d7b"
+                             FontSize="20"
+                             Background="#0c3d7b"
+                             InputScope="AlphanumericFullWidth"/>
+                </StackPanel>
+                
+                <StackPanel Orientation="Horizontal" 
+                            Width="300"
+                            Margin="0 15 0 0">
+                    <SymbolIcon Symbol="Permissions"
+                                Width="30"
+                                Height="30"
+                                VerticalAlignment="Center"
+                                Margin="0 0 5 0"
+                                Foreground="#1942D7"/>
+                    <PasswordBox x:Name="pass"
+                             PlaceholderText="contraseña"
+                             Width="250"
+                             BorderThickness="0.5"
+                             BorderBrush="#0c3d7b"
+                             FontSize="20"
+                             Background="#0c3d7b"                             
+                             />
+                    
+                </StackPanel>
+                <ProgressRing x:Name="PrgRing" 
+                              IsActive="True" 
+                              Visibility="Collapsed"
+                              Margin="0 15 0 0"
+                              Width="40"
+                              Height="40"/>
+                <Button 
+                        x:Name="login"
+                        Content="Login"
+                        Width="150"
+                        Margin="0 15 0 0"
+                        Click="Login"
+                        HorizontalAlignment="Center"
+                        Padding="0"
+                        Background="#1942D7">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Width="150">
+                                <SymbolIcon Symbol="Send" Width="30" Height="30" 
+                                                Foreground="White"
+                                            Margin="0 0 25 0"/>
+                                <TextBlock Text="Ingresar" VerticalAlignment="Center"
+                                               Foreground="White"
+                                           />
+                            </StackPanel>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+                <StackPanel Orientation="Horizontal" Margin="0 20 0 0"
+                            Height="25">
+                    <HyperlinkButton Content="Regístrate en Palns Pop!!"
+                                     Padding="0"
+                                     Foreground="#0c3d7b"
+                                     Margin="70 0 20 0"
+                                     FontSize="13" Click="register"/>
+                    <HyperlinkButton Content="Olvidaste tu contraseña??"
+                                     Padding="0"
+                                     Foreground="#0c3d7b"
+                                     Margin="20 0 60 0"
+                                     FontSize="13" Click="RemPass"                                     
+                                     />
+                </StackPanel>                
             </StackPanel>
-
         </RelativePanel>
 
-
+        
 
     </Grid>
 </Page>

@@ -26,10 +26,11 @@ namespace PlansPop
     public sealed partial class MainPage : Page
     {
         public MainPage()
-        {
+        {      
+                  
             this.InitializeComponent();
-            
-            
+
+            MainFrame.Navigate(typeof(Planes));
         }
 
         private ObservableCollection<MenuItem> menuList;

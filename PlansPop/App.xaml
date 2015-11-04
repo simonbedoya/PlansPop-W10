@@ -9,7 +9,25 @@
         <Style TargetType="ListBoxItem" x:Key="MenuItemStyle">
             <Setter Property="Padding" Value="0"/>
         </Style>
-    
+        <Style TargetType="TextBox" x:Key="TextUser">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Grid.Column="0"
+                                       Text="Usuario"
+                                       Foreground="Black"
+                                       />
+                            <SymbolIcon Symbol="Add"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         
     </Application.Resources>
 

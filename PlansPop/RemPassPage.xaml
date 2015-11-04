@@ -1,0 +1,125 @@
+﻿<Page
+    x:Class="PlansPop.RemPassPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PlansPop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="#0c3d7b">
+
+        <RelativePanel>
+            <StackPanel 
+                Background="White" 
+                Width="450" 
+                Height="330" 
+                RelativePanel.AlignHorizontalCenterWithPanel="True"
+                RelativePanel.AlignVerticalCenterWithPanel="True"
+                Orientation="Vertical"
+                CornerRadius="20"
+                >
+                <TextBlock Text="Recuperar contraseña"
+                          FontSize="30"
+                          HorizontalAlignment="Center"
+                          Margin="0 20 0 5"
+                          Foreground="#0c3d7b"/>
+                <TextBlock Text="Por favor coloca el correo electrónico con el que creo la cuenta en Plans Pop para poder suministrarle el link de recuperacion."
+                           TextWrapping="Wrap"
+                           Width="400"
+                           TextAlignment="Justify"
+                           Foreground="#0c3d7b"
+                           Margin="0 40 0 20"
+                           />
+                <StackPanel Orientation="Horizontal" 
+                            Width="350"
+                            Margin="0 15 0 0"
+                            >
+                    <SymbolIcon Symbol="Mail"
+                                Width="30"
+                                Height="30"
+                                VerticalAlignment="Center"
+                                Margin="0 0 5 0"
+                                Foreground="#1942D7"/>
+                    <TextBox x:Name="re_email"
+                             PlaceholderText="Correo electrónico"                             
+                             Width="300"
+                             BorderThickness="0.5"
+                             BorderBrush="#0c3d7b"
+                             FontSize="20"
+                             Background="#0c3d7b"
+                             InputScope="AlphanumericFullWidth" TextChanged="change_text" />
+                </StackPanel>
+                <TextBlock Text="Ingrese un correo electrónico valido."
+                           x:Name="warning"
+                           HorizontalAlignment="Center"
+                           Foreground="Red"
+                           Visibility="Collapsed"
+                           FontSize="12"
+                           Margin="30 0 0 0"/>
+                <ProgressRing x:Name="PrgRing2" 
+                              IsActive="True" 
+                              Visibility="Collapsed"
+                              Margin="0 15 0 0"
+                              Width="40"
+                              Height="40"/>
+                <SymbolIcon Symbol="Accept"
+                            x:Name="Accept"
+                            Margin="0 15 0 0"
+                            Width="40"
+                            Height="40"
+                            Visibility="Collapsed"
+                            Foreground="Green"/>
+                <StackPanel
+                	x:Name="panel_button" Height="74"
+                    Orientation="Horizontal"
+                    
+                    >
+                    <Button
+                        
+                		x:Name="Back"
+                		Content="atras"
+                		Width="40"
+                		Height="40"
+                		Margin="10 10 0 0"
+                		Background="Transparent" Click="back_login">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <SymbolIcon Symbol="Back" Foreground="#0c3d7b"/>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    
+                    <Button 
+                		x:Name="remember"
+                		Content="Solicitar"
+                		Width="150"
+                		Margin="120 15 0 0"
+                        
+                		HorizontalAlignment="Center"
+                		Padding="0"
+                		Background="#1942D7" Click="solicitar"
+                    >
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Width="150">
+                                    <SymbolIcon Symbol="Send" Width="30" Height="30" 
+                						Foreground="White"
+                						Margin="0 0 25 0"/>
+                                    <TextBlock Text="Solicitar" VerticalAlignment="Center"
+                						Foreground="White"
+                                           />
+                                </StackPanel>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                </StackPanel>
+
+                
+            </StackPanel>
+        </RelativePanel>
+
+
+
+    </Grid>
+</Page>

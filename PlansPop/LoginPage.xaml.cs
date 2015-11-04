@@ -36,27 +36,35 @@ namespace PlansPop
 
         private async void Login(object sender, RoutedEventArgs e)
         {
+            login.Visibility = Visibility.Collapsed;
+            PrgRing.Visibility = Visibility.Visible;
             try
             {
+                
                 userr = user.Text;
-                passs = pass.Text;
-
+                passs = pass.Password;
+                
                 if (userr.Equals("") || passs.Equals(""))
                 {
                     var dialog2 = new Windows.UI.Popups.MessageDialog("Por favor llene los campos usuario y contraseña");
                     dialog2.Commands.Add(new Windows.UI.Popups.UICommand("OK") { Id = 0 });
+                    PrgRing.Visibility = Visibility.Collapsed;
+                    login.Visibility = Visibility.Visible;
                     var result2 = await dialog2.ShowAsync();
                     vacio = 1;
+                    
                 }
                 else {
                     vacio = 0;
                 }
-
+                
                 await ParseUser.LogInAsync(userr, passs);
 
                 Frame rootFrame = Window.Current.Content as Frame;
                 rootFrame.Navigate(typeof(MainPage));
-                
+                PrgRing.Visibility = Visibility.Collapsed;
+                login.Visibility = Visibility.Visible;
+
                 // Login was successful.
             }
             catch (Exception ex)
@@ -67,18 +75,21 @@ namespace PlansPop
                     string error = ex.Message;
                     if (ex.Message.Equals("invalid login parameters"))
                     {
+                        PrgRing.Visibility = Visibility.Collapsed;
+                        login.Visibility = Visibility.Visible;
                         var dialog = new Windows.UI.Popups.MessageDialog("Usuario o contraseña incorrectos", "Informacion");
                         dialog.Commands.Add(new Windows.UI.Popups.UICommand("OK") { Id = 0 });
                         var result = await dialog.ShowAsync();
                     }
                     else
                     {
-
-
+                        PrgRing.Visibility = Visibility.Collapsed;
+                        login.Visibility = Visibility.Visible;
                         var dialog = new Windows.UI.Popups.MessageDialog("La conexion se esta tardando demasiado, verifique la conexion a internet e intente de nuevo.", "Alerta");
                         dialog.Commands.Add(new Windows.UI.Popups.UICommand("OK") { Id = 0 });
                         var result = await dialog.ShowAsync();
                     }
+                    
                 }
                 /* var dialog = new Windows.UI.Popups.MessageDialog("Hola");
                 dialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes") { Id = 0 });
@@ -97,6 +108,18 @@ namespace PlansPop
                 */
 
             }
+        }
+
+        private void RemPass(object sender, RoutedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+            rootFrame.Navigate(typeof(RemPassPage));
+        }
+
+        private void register(object sender, RoutedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+            rootFrame.Navigate(typeof(RegisterPage));
         }
     }
 }
