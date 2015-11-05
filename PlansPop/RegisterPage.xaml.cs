@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -96,6 +97,12 @@ namespace PlansPop
                     user["b_date"] = fecha;
 
                     await user.SignUpAsync();
+                    PrgRing.Visibility = Visibility.Collapsed;
+                    await ParseUser.LogInAsync(userr, passs);
+                    Accept.Visibility = Visibility.Visible;
+                    await Task.Delay(2000);
+                    Frame rootFrame = Window.Current.Content as Frame;
+                    rootFrame.Navigate(typeof(MainPage));
                 }
                 catch (Exception ex)
                 {

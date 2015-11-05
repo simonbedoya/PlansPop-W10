@@ -176,6 +176,13 @@
                               Margin="0 15 0 0"
                               Width="40"
                               Height="40"/>
+                <SymbolIcon 
+                            x:Name="Accept"
+                            Symbol="Accept"
+                            Margin="0 15 0 0"
+                            Width="40"
+                            Height="40"
+                            Visibility="Collapsed"/>
                 <TextBlock x:Name="Errors"
                            Foreground="Red"
                            FontSize="12"

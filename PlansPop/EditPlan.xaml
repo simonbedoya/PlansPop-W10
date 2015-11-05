@@ -1,0 +1,95 @@
+﻿<Page
+    x:Class="PlansPop.EditPlan"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PlansPop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="650"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Padding="10"
+                    Grid.Column="0">
+
+            <TextBlock Text="Editar Plan"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,10"
+                       />
+
+            <StackPanel Padding="10">
+
+                <Image x:Name="editImage" Width="600" Height="250"
+                       Source="/Assets/fotoplan.jpg"/>
+
+
+                <Grid Width="300" HorizontalAlignment="Center" Margin="0,10,0,10"
+                          >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btnEditElegir" Content="Elegir una Foto"
+                                Grid.Column="0"
+                                HorizontalAlignment="Center" Click="onElegirFoto"/>
+                    <Button x:Name="btnEditTomar" Content="Tomar una Foto"
+                                Grid.Column="1"
+                                HorizontalAlignment="Center" Click="onTomarFoto"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center">
+                <TextBox x:Name="editNombre"
+                             PlaceholderText="Nombre"
+                             Margin="0,10,0,10"
+                             HorizontalAlignment="Left"
+                             Width="600"
+                             />
+                <TextBox x:Name="editDescripcion"
+                             PlaceholderText="Descripcion"
+                             HorizontalAlignment="Left"
+                             Width="600"
+                             Margin="0,0,0,10"
+                             />
+                <Grid Width="600"
+                          HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <DatePicker x:Name="editFecha" Header="Fecha" Grid.Column="0" Grid.Row="0"
+                                HorizontalAlignment="Left" 
+                                />
+                    <TimePicker x:Name="editHora" Header="Hora" Grid.Column="1" Grid.Row="0"
+                                HorizontalAlignment="Right"/>
+
+                    <TextBlock x:Name="NombreLugarTxt" Text="Nombre Lugar"
+                               Grid.Column="0"
+                               Grid.Row="1"
+                               Style="{StaticResource SubtitleTextBlockStyle}"/>
+
+                    <Button x:Name="btnEditSiguiente" Margin="0,5,0,0"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Content="Siguiente" Click="onClickEditSiguiente"/>
+                </Grid>
+
+            </StackPanel>
+
+        </StackPanel>
+        <StackPanel Padding="30" Grid.Column="1" >
+            <Maps:MapControl x:Name="editMap" 
+                             Height="600"  MapHolding="editMapTapped" MapElementClick="editElementClick"/>
+        </StackPanel>
+    </Grid>
+</Page>

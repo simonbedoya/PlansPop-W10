@@ -43,7 +43,7 @@
                              BorderBrush="#0c3d7b"
                              FontSize="20"
                              Background="#0c3d7b"
-                             InputScope="AlphanumericFullWidth"/>
+                             InputScope="AlphanumericFullWidth" TextChanged="text_change"/>
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal" 
@@ -61,21 +61,30 @@
                              BorderThickness="0.5"
                              BorderBrush="#0c3d7b"
                              FontSize="20"
-                             Background="#0c3d7b"                             
+                             Background="#0c3d7b" PasswordChanged="pass_change"                             
                              />
                     
                 </StackPanel>
+                <TextBlock 
+                    x:Name="error"
+                    HorizontalAlignment="Center"
+                    Margin="20 0 0 0"
+                    Visibility="Collapsed"
+                    FontSize="12"
+                    Foreground="Red"
+                    />
                 <ProgressRing x:Name="PrgRing" 
                               IsActive="True" 
                               Visibility="Collapsed"
                               Margin="0 15 0 0"
                               Width="40"
                               Height="40"/>
+                
                 <Button 
                         x:Name="login"
                         Content="Login"
                         Width="150"
-                        Margin="0 15 0 0"
+                        Margin="0 20 0 0"
                         Click="Login"
                         HorizontalAlignment="Center"
                         Padding="0"

@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="PlansPop.MisPlanes"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PlansPop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:models="using:PlansPop.Models">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <GridView
+                    x:Name="MisPlanesGrid"
+                    ItemsSource="{x:Bind MiPlanViewModel.MiPlanItems}" SelectionChanged="MisPlanesGrid_SelectionChanged" 
+                    >
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="models:PlanItem">
+                    <RelativePanel Width="130" Height="130" Margin="10">
+                        <Rectangle Width="130" Height="130">
+                            <Rectangle.Fill>
+                                <ImageBrush ImageSource="{x:Bind ImagenUrl}" Stretch="UniformToFill"/>
+                            </Rectangle.Fill>
+                        </Rectangle>
+
+                        <StackPanel Background="#99000000"
+                                            RelativePanel.AlignBottomWithPanel="True"
+                                            Padding="4"
+                                            >
+                            <TextBlock  Width="130" 
+                                         
+                                         Text="{x:Bind Nombre}"
+                                         Foreground="White"
+                                         />
+                        </StackPanel>
+
+
+                    </RelativePanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+
+        </GridView>
+    </Grid>
+</Page>

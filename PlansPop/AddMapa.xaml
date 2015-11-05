@@ -1,16 +1,18 @@
 ﻿<Page
-    x:Class="PlansPop.Mapa"
+    x:Class="PlansPop.AddMapa"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PlansPop"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:datos="using:PlansPop.Models"
     mc:Ignorable="d"
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Maps:MapControl x:Name="map" MapElementClick="elementClick" MapHolding="map_MapHolding" 
-                         />
+
+        <Maps:MapControl x:Name="mapControl" MapHolding="MapTapped" MapElementClick="ElementClick"/>
+        <ProgressRing x:Name="progressRing" IsActive="False" Height="90" Width="90" 
+                          />
+
     </Grid>
 </Page>

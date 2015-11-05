@@ -25,11 +25,13 @@ namespace PlansPop
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        
+
         public MainPage()
         {      
                   
             this.InitializeComponent();
-
+            CargarDatos();
             MainFrame.Navigate(typeof(Planes));
         }
 
@@ -103,12 +105,19 @@ namespace PlansPop
                 case 1:
                     MainFrame.Navigate(typeof(Mapa));
                     break;
+                case 2:
+                    MainFrame.Navigate(typeof(MisPlanes));
+                    break;
+                case 3:
+                    MainFrame.Navigate(typeof(AgregarPlan));
+                    break;
             }
            
 
             
 
         }
+        
 
         private void logout(object sender, RoutedEventArgs e)
         {
@@ -116,6 +125,14 @@ namespace PlansPop
             var currentUser = ParseUser.CurrentUser; // this will now be null
             Frame rootFrame = Window.Current.Content as Frame;
             rootFrame.Navigate(typeof(LoginPage));
+        }
+        
+        public void CargarDatos()
+        {
+            
+                var user = ParseUser.CurrentUser;
+                name.Text = user.Get<String>("name");
+                email.Text = user.Email;
         }
     }
 }

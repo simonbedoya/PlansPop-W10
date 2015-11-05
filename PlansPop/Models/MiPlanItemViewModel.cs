@@ -8,25 +8,29 @@ using System.Threading.Tasks;
 
 namespace PlansPop.Models
 {
-    public class PlanItemViewModel
+    public class MiPlanItemViewModel
     {
-        private ObservableCollection<PlanItem> planItems = new ObservableCollection<PlanItem>();
 
-        public ObservableCollection<PlanItem> PlanItems
+        private ObservableCollection<PlanItem> miPlanItems = new ObservableCollection<PlanItem>();
+
+        public ObservableCollection<PlanItem> MiPlanItems
         {
-            get { return this.planItems; }
-            set { this.planItems = value; }
+            get { return this.miPlanItems; }
+            set { this.miPlanItems = value; }
 
         }
 
-        public PlanItemViewModel()
+        public MiPlanItemViewModel()
         {
-            CargarDatos();
+            CargarMisPlanes();
         }
 
-        public async void CargarDatos()
+        public async void CargarMisPlanes()
         {
-            ParseQuery<ParseObject> query = ParseObject.GetQuery("Plan");
+
+            ParseUser user = ParseUser.CurrentUser;
+
+            var query = ParseObject.GetQuery("Plan").WhereEqualTo("id_user", user);
             IEnumerable<ParseObject> results = await query.FindAsync();
 
             ParseObject plan;
@@ -44,16 +48,15 @@ namespace PlansPop.Models
 
                 item = new PlanItem()
                 {
+                    obj = plan,
                     Nombre = plan.Get<string>("nombre"),
                     Fecha = plan.Get<string>("fecha"),
                     ImagenUrl = imagenURL,
-                    Direccion = plan.Get<string>("direccion"),
-                    Descripcion = plan.Get<string>("descripcion")
+                    Direccion = plan.Get<string>("direccion")
                 };
 
-                planItems.Add(item);
+                miPlanItems.Add(item);
             }
         }
-
     }
 }

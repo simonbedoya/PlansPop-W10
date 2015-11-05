@@ -15,7 +15,7 @@
             IsPaneOpen="True"
             OpenPaneLength="280"
             CompactPaneLength="50"
-            PaneBackground="#333333"
+            PaneBackground="#0c3d7b"
             >
             <SplitView.Pane>
                 <StackPanel>
@@ -27,8 +27,8 @@
                             <Rectangle Fill="White" Width="25" Height="3" Margin="0,0,0,4"/>
                         </StackPanel>
                     </Button>
-                    
-                    <RelativePanel x:Name="profile" Height="120" Background="Gray">
+
+                    <RelativePanel x:Name="profile" Height="120" Background="#000044">
                         <Ellipse 
                             Width="50" Height="50"
                             Margin="20 5 0 0">
@@ -40,8 +40,8 @@
                             RelativePanel.AlignTopWithPanel="True"
                             RelativePanel.AlignRightWithPanel="True"
                             Margin="10"
-                            Background="Gray">
-                            <SymbolIcon Symbol="Setting" Foreground="White"/>
+                            Background="Transparent">
+                            <SymbolIcon Symbol="Setting" Foreground="White" />
                         </Button>
                         <TextBlock 
                             x:Name="email"

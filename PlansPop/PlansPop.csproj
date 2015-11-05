@@ -98,8 +98,17 @@
     <None Include="Service References\Application Insights\ConnectedService.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddMapa.xaml.cs">
+      <DependentUpon>AddMapa.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AgregarPlan.xaml.cs">
+      <DependentUpon>AgregarPlan.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditPlan.xaml.cs">
+      <DependentUpon>EditPlan.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -110,8 +119,12 @@
     <Compile Include="Mapa.xaml.cs">
       <DependentUpon>Mapa.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\MapView.cs" />
+    <Compile Include="MisPlanes.xaml.cs">
+      <DependentUpon>MisPlanes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\MenuItem.cs" />
+    <Compile Include="Models\MiPlanItemViewModel.cs" />
+    <Compile Include="Models\Plan.cs" />
     <Compile Include="Models\PlanItem.cs" />
     <Compile Include="Models\PlanItemViewModel.cs" />
     <Compile Include="Planes.xaml.cs">
@@ -132,8 +145,11 @@
     <None Include="PlansPop_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\bus.jpg" />
+    <Content Include="Assets\bus.png" />
+    <Content Include="Assets\fotoplan.jpg" />
     <Content Include="Assets\Logo_login.png" />
+    <Content Include="Assets\Logo_photoshop.scale-100.png" />
+    <Content Include="Assets\Logo_photoshop_gr.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -148,6 +164,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="AddMapa.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AgregarPlan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditPlan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -157,6 +185,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Mapa.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MisPlanes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
