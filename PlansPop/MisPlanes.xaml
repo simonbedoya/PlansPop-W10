@@ -15,22 +15,73 @@
                     >
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="models:PlanItem">
-                    <RelativePanel Width="130" Height="130" Margin="10">
-                        <Rectangle Width="130" Height="130">
+                    <RelativePanel Width="325" Height="300" Margin="10"
+                                   Background="#1942D7">
+                        <Rectangle Width="325" Height="195"
+                                   Margin="0 0 0 0"
+                                   HorizontalAlignment="Center"
+                                   >
                             <Rectangle.Fill>
-                                <ImageBrush ImageSource="{x:Bind ImagenUrl}" Stretch="UniformToFill"/>
+                                <ImageBrush ImageSource="{x:Bind ImagenUrl}"                                             
+                                            Stretch="UniformToFill"/>
                             </Rectangle.Fill>
                         </Rectangle>
 
                         <StackPanel Background="#99000000"
                                             RelativePanel.AlignBottomWithPanel="True"
                                             Padding="4"
+                                    Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Width="325"
+                                    Height="101"
+                                    Margin="3"
                                             >
-                            <TextBlock  Width="130" 
-                                         
+                            <StackPanel Orientation="Horizontal"
+                                        Height="70">
+                                <TextBlock  Width="150"
+                                        Padding="5 2 0 0"
+                                         TextWrapping="Wrap"
                                          Text="{x:Bind Nombre}"
                                          Foreground="White"
                                          />
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="Dirección:" 
+                                       FontSize="12"
+                                       Padding="5 2 0 0"
+                                       Foreground="White"
+                                       />
+                                    <TextBlock Text="{x:Bind Direccion}"
+                                       FontSize="12"
+                                       Foreground="White"
+                                       Padding="5 2 0 0"
+                                       Width="150"
+                                       Height="50"
+                                       TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Bind Fecha}" 
+                                       Foreground="White"
+                                       FontSize="12"
+                                       Padding="5 2 0 0"
+                                       TextAlignment="Left"
+                                       Width="250"/>
+                                <SymbolIcon 
+                                            
+                                            Symbol="AddFriend"
+                                            Width="20"
+                                            Height="20"
+                                            Foreground="White"
+                                            Margin="0 2 0 0"/>
+                                <TextBlock Text="1000"
+                                           Width="30"
+                                           TextAlignment="Center"
+                                           Margin="0 0 0 0"
+                                           FontSize="12"
+                                           Foreground="White"
+                                           Padding="0 2 0 0"/>
+                            </StackPanel>
                         </StackPanel>
 
 
@@ -39,5 +90,7 @@
             </GridView.ItemTemplate>
 
         </GridView>
+
+        
     </Grid>
 </Page>

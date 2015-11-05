@@ -38,7 +38,7 @@ namespace PlansPop
 
         StorageFile photo;
 
-        ParseObject parseObj;
+       // ParseObject parseObj;
 
 
         private string imgURL = "http://files.parsetfss.com/b5b17f71-5029-472e-9a5a-080cf10284b3/tfss-90911fe4-2118-41ee-83ca-04def59d0512-piscina.jpg";
