@@ -100,8 +100,40 @@ namespace PlansPop
             mapIcon.Title = plan.Get<string>("direccion");
             mapIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/posicionPlan.png"));
             mapIcon.ZIndex = 0;
-
+            getPosicionActual();
             VerMap.MapElements.Add(mapIcon);
+
+        }
+        private async void getPosicionActual()
+        {
+            var accessStatus = await Geolocator.RequestAccessAsync();
+
+            switch (accessStatus)
+            {
+                case GeolocationAccessStatus.Allowed:
+
+                    Geolocator myGeolocator = new Geolocator();
+                    Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync();
+                    Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
+
+                    MapIcon posicionActual = new MapIcon();
+                    posicionActual.Location = myGeocoordinate.Point;
+                    posicionActual.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                    posicionActual.Title = "MiPosicion";
+                    posicionActual.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/posicion_actual.png"));
+                    posicionActual.ZIndex = 0;
+                    VerMap.MapElements.Add(posicionActual);
+
+                    break;
+
+                case GeolocationAccessStatus.Denied:
+
+                    break;
+
+                case GeolocationAccessStatus.Unspecified:
+
+                    break;
+            }
 
         }
 
@@ -110,13 +142,13 @@ namespace PlansPop
             string Id_creador = plan.Get<ParseObject>("id_user").ObjectId;
 
             var creador = await ParseUser.Query.GetAsync(Id_creador);
-            VerCreador.Text = "Creado por: " + creador.Get<string>("name");
+            VerCreador.Text = creador.Get<string>("name");
 
             ParseRelation<ParseUser> relation = plan.GetRelation<ParseUser>("Asistentes");
             IEnumerable<ParseUser> resul = await relation.Query.FindAsync();
 
             int numero = resul.Count<ParseUser>();
-            VerAsistentes.Text = "Asistentes: " + numero;
+            VerAsistentes.Text = numero.ToString();
 
             if (numero > 0)
             {
@@ -127,13 +159,13 @@ namespace PlansPop
                     user = resul.ElementAt<ParseUser>(i);
                     if (!asistente.ObjectId.Equals(user.ObjectId))
                     { // no es asistente
-                        btnAsistir.Content = "Asistir";
+                        
                         btnAsistir.Background = new SolidColorBrush(Colors.White);
 
                     }
                     else
                     {// es asistente
-                        btnAsistir.Content = "Asistiendo";
+                        
                         btnAsistir.Background = new SolidColorBrush(Colors.Cyan);
 
                     }
@@ -141,7 +173,7 @@ namespace PlansPop
             }
             else
             {
-                btnAsistir.Content = "Asistir";
+                
                 btnAsistir.Background = new SolidColorBrush(Colors.White);
             }
 
@@ -171,8 +203,8 @@ namespace PlansPop
                     { // Borrarlo de asistentes
                         numero = count - 1;
                         noAsistente = 1;
-                        VerAsistentes.Text = "Asistentes: " + numero;
-                        btnAsistir.Content = "Asistir";
+                        VerAsistentes.Text = numero.ToString();
+                        
                         btnAsistir.Background = new SolidColorBrush(Colors.White);
                         addRelation.Remove(asistente);
                         await plan.SaveAsync();
@@ -182,8 +214,8 @@ namespace PlansPop
                 if (noAsistente == -1)
                 {
                     numero = count + 1;
-                    VerAsistentes.Text = "Asistentes: " + numero;
-                    btnAsistir.Content = "Asistiendo";
+                    VerAsistentes.Text = numero.ToString();
+                    //asistiendo
                     btnAsistir.Background = new SolidColorBrush(Colors.Cyan);
                     addRelation.Add(asistente);
                     await plan.SaveAsync();
@@ -196,8 +228,8 @@ namespace PlansPop
             else
             {
                 numero = 1;
-                VerAsistentes.Text = "Asistentes: " + numero;
-                btnAsistir.Content = "Asistiendo";
+                VerAsistentes.Text = numero.ToString();
+                //assitiendo
                 btnAsistir.Background = new SolidColorBrush(Colors.Cyan);
                 addRelation.Add(asistente);
                 await plan.SaveAsync();

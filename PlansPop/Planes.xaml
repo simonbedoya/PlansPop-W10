@@ -75,7 +75,7 @@
                                             Height="20"
                                             Foreground="White"
                                             Margin="0 2 0 0"/>
-                                <TextBlock Text="1000"
+                                <TextBlock Text="{x:Bind Asistentes}"
                                            Width="30"
                                            TextAlignment="Center"
                                            Margin="0 0 0 0"
@@ -91,5 +91,7 @@
             </GridView.ItemTemplate>
 
         </GridView>
+        <ProgressRing x:Name="progressRing" IsActive="False" Height="90" Width="90" 
+                          />
     </Grid>
 </Page>

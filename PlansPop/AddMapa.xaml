@@ -10,6 +10,22 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+        <ContentDialog x:Name="contentDialog"
+                        Title="Dale un titulo al lugar"
+                        Width="500"
+                        Margin="325,-310,455,0"                        
+                        Height="280"
+                        PrimaryButtonText="Ok" PrimaryButtonClick="contentDialog_PrimaryButtonClick"
+                        
+                       >
+            <StackPanel>
+                <TextBox x:Name="tituloLugar"
+                        PlaceholderText="Titulo del lugar"
+                        />
+            </StackPanel>
+
+        </ContentDialog>
+
         <Maps:MapControl x:Name="mapControl" MapHolding="MapTapped" MapElementClick="ElementClick"/>
         <ProgressRing x:Name="progressRing" IsActive="False" Height="90" Width="90" 
                           />

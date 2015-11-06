@@ -75,6 +75,8 @@ namespace PlansPop
             // Agregarlos al mapa
             int tamanio = results.Count<ParseObject>();
 
+            // Get my current location.
+            getPosicionActual();
 
             for (int i = 0; i < tamanio; i++)
             {
@@ -98,6 +100,40 @@ namespace PlansPop
             }
 
         }
+
+        private async void getPosicionActual()
+        {
+            var accessStatus = await Geolocator.RequestAccessAsync();
+
+            switch (accessStatus)
+            {
+                case GeolocationAccessStatus.Allowed:
+
+                    Geolocator myGeolocator = new Geolocator();
+                    Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync();
+                    Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
+
+                    MapIcon posicionActual = new MapIcon();
+                    posicionActual.Location = myGeocoordinate.Point;
+                    posicionActual.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                    posicionActual.Title = "MiPosicion";
+                    posicionActual.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/posicion_actual.png"));
+                    posicionActual.ZIndex = 0;
+                    map.MapElements.Add(posicionActual);
+
+                    break;
+
+                case GeolocationAccessStatus.Denied:
+
+                    break;
+
+                case GeolocationAccessStatus.Unspecified:
+
+                    break;
+            }
+
+        }
+
 
         private async void elementClick(MapControl sender, MapElementClickEventArgs args)
         {

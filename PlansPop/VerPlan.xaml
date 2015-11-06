@@ -13,49 +13,86 @@
             <ColumnDefinition Width="650"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Padding="10" Background="DarkSlateBlue">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Image x:Name="VerImage" Width="300" Height="200" Grid.Column="0" Stretch="UniformToFill"
+        <StackPanel Grid.Column="0" Padding="10" Background="#000044">
+            
+                <Image x:Name="VerImage" Width="300" Height="200"  Stretch="UniformToFill"
                        Source="/Assets/fotoplan.jpg"/>
-                <StackPanel Grid.Column="1">
-                    <TextBlock x:Name="VerNombre"
+                <StackPanel Margin="0 20 0 0">
+                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Width="370">
+                    <TextBlock     Text="Nombre del Plan:"
+                                   Foreground="White"
+                                   Margin="10,25,0,0"                                   
+                                   FontSize="20"
+                                 />
+                <TextBlock x:Name="VerNombre"
                                    Text="Nombre del Plan"
                                    Foreground="White"
-                                   Margin="10,25,0,0"
-                                   Style="{StaticResource TitleTextBlockStyle}"
+                                   Margin="10,5,0,0"                                   
+                                   FontSize="16"
+                                   TextWrapping="Wrap"
                                  />
-                    <TextBlock x:Name="VerFecha" Text="Fecha"
+                <TextBlock           Text="Fecha / Hora:"
                                    Foreground="White"
-                                   Margin="10,0,0,0"
-                                   Style="{StaticResource SubtitleTextBlockStyle}"/>
-
-                    <TextBlock x:Name="VerCreador" Text="Creador"
-                                   Margin="10,30,0,0"
+                                   Margin="10,20,0,0"
+                                   FontSize="20"/>
+                <TextBlock x:Name="VerFecha" Text="Fecha"
                                    Foreground="White"
-                                   Style="{StaticResource SubtitleTextBlockStyle}"/>
-                    <TextBlock x:Name="VerAsistentes" Text="NumeroAsistentes"
-                                   Margin="10,0,0,0"
-                                   Foreground="White"
-                                   Style="{StaticResource SubtitleTextBlockStyle}"/>
-
-                </StackPanel>
-            </Grid>
-            <StackPanel Padding="10">
+                                   Margin="10,5,0,0"
+                                   FontSize="16"/>
+                <TextBlock  Text="Dirección:"
+                               Foreground="White"
+                               Margin="10,20,0,0"
+                               FontSize="20"/>
                 <TextBlock x:Name="VerDireccion" Text="Direccion"
                                Foreground="White"
-                               Margin="0,0,0,5"
-                               Style="{StaticResource SubtitleTextBlockStyle}"/>
-                <TextBlock x:Name="VerDescripcion" Text="Descripcion"
+                               Margin="10,5,0,0"
+                               FontSize="16"/>
+                <TextBlock         Text="Creador:"
+                                   Margin="10,20,0,0"
+                                   Foreground="White"
+                                   FontSize="20"/>
+                <TextBlock x:Name="VerCreador" Text="Creador"
+                                   Margin="10,5,0,0"
+                                   Foreground="White"
+                                   FontSize="16"/>
+                    
+                </StackPanel>
+                    <StackPanel Orientation="Vertical" Width="250">
+                        <TextBlock Text="Descripción:"
                                Foreground="White"
-                               Margin="0,0,0,5"
-                               Style="{StaticResource SubtitleTextBlockStyle}"/>
+                               Margin="10,25,0,0"
+                               FontSize="20"/>
+                        <TextBlock x:Name="VerDescripcion" Text="Descripcion"
+                               Foreground="White"
+                               Margin="10,5,0,0"
+                               FontSize="16"
+                                   Height="250"
+                               TextWrapping="Wrap"/>
+                        
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Asistentes:"
+                                   Margin="10,20,0,0"
+                                   Foreground="White"
+                                   FontSize="20"/>
+                <TextBlock x:Name="VerAsistentes" 
+                                   Margin="30,20,0,0"
+                                   Foreground="White"
+                                   Width="60"
+                                   FontSize="20"/>
+
                 <Button x:Name="btnAsistir"
-                            Content="Asistir" Background="White"
-                            Margin="0,5,0,0" Click="onClickAsistir"/>
+                             Background="White"
+                            Margin="190,7,0,0" Click="onClickAsistir">
+                    <SymbolIcon Symbol="AddFriend"
+                                Width="30"
+                                Height="30"
+                                x:Name="symbol"/>
+                </Button>
             </StackPanel>
         </StackPanel>
 

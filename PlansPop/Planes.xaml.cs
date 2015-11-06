@@ -27,10 +27,8 @@ namespace PlansPop
 
         public Planes()
         {
-
-            this.InitializeComponent();
-            this.ViewModel = new PlanItemViewModel();
-
+            this.InitializeComponent();            
+            this.ViewModel = new PlanItemViewModel();            
             this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 

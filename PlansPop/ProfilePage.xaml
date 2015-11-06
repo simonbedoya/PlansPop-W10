@@ -65,7 +65,8 @@
                         Height="520"
                         RelativePanel.RightOf="image"
                         Padding="10"
-                        x:Name="info">
+                        x:Name="info"
+                        >
                 
                 <TextBlock Text="Nombre:"
                            FontSize="25"/>
@@ -119,8 +120,13 @@
                         Width="500"
                         x:Name="panel_edit">
                 <Button x:Name="btn_edit"
-                        Margin="450 0 0 0" Click="edit">
+                        Margin="390 0 0 0" Click="edit">
                     <SymbolIcon Symbol="Edit" Width="30"
+                                Height="30"/>
+                </Button>
+                <Button x:Name="btn_chg_pass"
+                        Margin="10 0 0 0" Click="changed_pass" >
+                    <SymbolIcon Symbol="Permissions" Width="30"
                                 Height="30"/>
                 </Button>
             </StackPanel>
@@ -163,6 +169,110 @@
                            VerticalAlignment="Center"
                            Visibility="Collapsed"/>
                     
+            </StackPanel>
+            <StackPanel Orientation="Vertical"
+                        RelativePanel.Below="image"
+                        Width="350"
+                        Height="250"
+                        Margin="55 40 0 0"
+                        x:Name="change_pass"
+                        Visibility="Collapsed">
+                <TextBlock Text="Cambiar contraseña:" 
+                           Margin="10 10 0 0"
+                           FontSize="20"
+                           Foreground="#0c3d7b"/>
+                <StackPanel Orientation="Horizontal" 
+                            Width="300"
+                            Margin="0 15 0 0">
+                    <SymbolIcon Symbol="Permissions"
+                                Width="20"
+                                Height="20"
+                                VerticalAlignment="Center"
+                                Margin="0 0 10 0"
+                                Foreground="#1942D7"/>
+                    <PasswordBox x:Name="pass_act"
+                             PlaceholderText="Contraseña actual"
+                             Width="300"
+                             BorderThickness="0.5"
+                             BorderBrush="#0c3d7b"
+                             FontSize="15"
+                             Background="#0c3d7b" 
+                                 
+                             />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
+                            Width="300"
+                            Margin="0 15 0 0">
+                    <SymbolIcon Symbol="Permissions"
+                                Width="20"
+                                Height="20"
+                                VerticalAlignment="Center"
+                                Margin="0 0 10 0"
+                                Foreground="#1942D7"/>
+                    <PasswordBox x:Name="pass_new"
+                             PlaceholderText="Contraseña nueva"
+                             Width="300"
+                             BorderThickness="0.5"
+                             BorderBrush="#0c3d7b"
+                             FontSize="15"
+                             Background="#0c3d7b" 
+                                 
+                             />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" 
+                            Width="300"
+                            Margin="0 15 0 0">
+                    <SymbolIcon Symbol="Permissions"
+                                Width="20"
+                                Height="20"
+                                VerticalAlignment="Center"
+                                Margin="0 0 10 0"
+                                Foreground="#1942D7"/>
+                    <PasswordBox x:Name="pass_re_new"
+                             PlaceholderText="Repetir contraseña"
+                             Width="300"
+                             BorderThickness="0.5"
+                             BorderBrush="#0c3d7b"
+                             FontSize="15"
+                             Background="#0c3d7b" 
+                                 
+                             />
+                </StackPanel>
+                <StackPanel Margin="0 20 0 0"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                           >
+                    <TextBlock 
+                        x:Name="error_pass"        
+                            
+                               Foreground="Red"
+                               Margin="0 0 10 0"
+                               VerticalAlignment="Center"
+                        Visibility="Collapsed"/>
+                    <SymbolIcon Symbol="Accept" 
+                                Foreground="Green"
+                                Width="30"
+                                Height="30"
+                                Margin="0 0 70 0"
+                                x:Name="accept_pass"
+                                Visibility="Collapsed"/>
+                    <ProgressRing x:Name="PrgRing3"
+                                 IsActive="True"
+                                  Width="30"
+                                  Height="30"
+                                  Margin="0 0 70 0"
+                                  Visibility="Collapsed"
+                                  />
+                    <Button x:Name="save_passw"
+                        Margin="0 0 0 0" Click="save_pass" >
+                        <SymbolIcon Symbol="Save"/>
+                    </Button>
+                    <Button 
+                        x:Name="cancel"
+                        Margin="10 0 30 0" Click="cancel_pass">
+                        <SymbolIcon Symbol="Cancel"/>
+                    </Button>
+                </StackPanel>
             </StackPanel>
         </RelativePanel>
     </Grid>

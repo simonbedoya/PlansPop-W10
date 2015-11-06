@@ -14,12 +14,13 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Windows;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace PlansPop
 {
-   
+
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -40,10 +41,10 @@ namespace PlansPop
             PrgRing.Visibility = Visibility.Visible;
             try
             {
-                
+
                 userr = user.Text;
                 passs = pass.Password;
-                
+
                 if (userr.Equals("") || passs.Equals(""))
                 {
                     error.Text = "Por favor ingrese usuario y contraseña";
@@ -53,14 +54,15 @@ namespace PlansPop
                     login.Margin = margin;
                     PrgRing.Visibility = Visibility.Collapsed;
                     login.Visibility = Visibility.Visible;
-                    
+
                     vacio = 1;
-                    
+
                 }
-                else {
+                else
+                {
                     vacio = 0;
                 }
-                
+
                 await ParseUser.LogInAsync(userr, passs);
 
                 Frame rootFrame = Window.Current.Content as Frame;
@@ -85,7 +87,7 @@ namespace PlansPop
                         login.Margin = margin;
                         PrgRing.Visibility = Visibility.Collapsed;
                         login.Visibility = Visibility.Visible;
-                        
+
                     }
                     else
                     {
@@ -96,9 +98,9 @@ namespace PlansPop
                         login.Margin = margin;
                         PrgRing.Visibility = Visibility.Collapsed;
                         login.Visibility = Visibility.Visible;
-                        
+
                     }
-                    
+
                 }
                 /* var dialog = new Windows.UI.Popups.MessageDialog("Hola");
                 dialog.Commands.Add(new Windows.UI.Popups.UICommand("Yes") { Id = 0 });
@@ -146,5 +148,6 @@ namespace PlansPop
             margin.Top = 20;
             login.Margin = margin;
         }
+
     }
 }

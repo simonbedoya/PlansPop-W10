@@ -30,6 +30,7 @@ namespace PlansPop
     /// </summary>
     public sealed partial class ProfilePage : Page
     {
+        string msg;
         ParseUser user = ParseUser.CurrentUser;
         private StorageFile photo;
 
@@ -222,5 +223,74 @@ namespace PlansPop
                 return bytes;
             }
         }
+
+        private void changed_pass(object sender, RoutedEventArgs e)
+        {
+            if (change_pass.Visibility == Visibility.Visible)
+            {
+                change_pass.Visibility = Visibility.Collapsed;
+            }
+            else {
+                change_pass.Visibility = Visibility.Visible;
+            }
+            
+        }
+
+        private void cancel_pass(object sender, RoutedEventArgs e)
+        {
+            change_pass.Visibility = Visibility.Collapsed;
+        }
+
+        private async void save_pass(object sender, RoutedEventArgs e)
+        {
+            PrgRing3.Visibility = Visibility.Visible;
+            string old_pass = pass_act.Password;
+            string new_pass = pass_new.Password;
+            string new_pass_re = pass_re_new.Password;
+
+            if (new_pass.Equals(new_pass_re))
+            {
+                if (!new_pass.Equals(""))
+                {
+                    user.Password = new_pass;
+                    try
+                    {
+                        await user.SaveAsync();
+                        PrgRing3.Visibility = Visibility.Collapsed;
+                        accept_pass.Visibility = Visibility.Visible;
+                        await Task.Delay(2000);
+                        accept_pass.Visibility = Visibility.Collapsed;
+                        Frame rootFrame = Window.Current.Content as Frame;
+                        rootFrame.Navigate(typeof(LoginPage));
+                    }
+                    catch (Exception)
+                    {
+
+                        PrgRing3.Visibility = Visibility.Collapsed;
+                        error_pass.Text = "No se actualizo.";
+                        error_pass.Visibility = Visibility.Visible;
+                        await Task.Delay(1500);
+                        error_pass.Visibility = Visibility.Collapsed;
+                    }
+                }
+                else {
+                    PrgRing3.Visibility = Visibility.Collapsed;
+                    error_pass.Text = "Por favor llene los campos.";
+                    error_pass.Visibility = Visibility.Visible;
+                    await Task.Delay(1500);
+                    error_pass.Visibility = Visibility.Collapsed;
+                }
+
+            }
+            else
+            {
+                PrgRing3.Visibility = Visibility.Collapsed;
+                error_pass.Text = "Las contraseñas deben coincidir.";
+                error_pass.Visibility = Visibility.Visible;
+                await Task.Delay(1500);
+                error_pass.Visibility = Visibility.Collapsed;
+            }
+        }
+        
     }
 }

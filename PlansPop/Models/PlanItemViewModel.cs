@@ -26,6 +26,7 @@ namespace PlansPop.Models
 
         public async void CargarDatos()
         {
+            
             ParseQuery<ParseObject> query = ParseObject.GetQuery("Plan");
             IEnumerable<ParseObject> results = await query.FindAsync();
 
@@ -37,6 +38,10 @@ namespace PlansPop.Models
             for (int i = 0; i < tamanio; i++)
             {
                 plan = results.ElementAt<ParseObject>(i);
+                ParseRelation<ParseUser> relation = plan.GetRelation<ParseUser>("Asistentes");
+                IEnumerable<ParseUser> resul = await relation.Query.FindAsync();
+
+                int numero = resul.Count<ParseUser>();
 
                 Uri imagen = plan.Get<ParseFile>("imagen").Url;
                 string imagenURL = imagen.AbsoluteUri;
@@ -44,11 +49,13 @@ namespace PlansPop.Models
 
                 item = new PlanItem()
                 {
+                    obj = plan,
                     Nombre = plan.Get<string>("nombre"),
                     Fecha = plan.Get<string>("fecha"),
                     ImagenUrl = imagenURL,
                     Direccion = plan.Get<string>("direccion"),
-                    Descripcion = plan.Get<string>("descripcion")
+                    Descripcion = plan.Get<string>("descripcion"),
+                    Asistentes = numero.ToString()
                 };
 
                 planItems.Add(item);

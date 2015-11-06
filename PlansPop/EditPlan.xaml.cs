@@ -42,6 +42,7 @@ namespace PlansPop
 
         ParseGeoPoint gPoint;
         string direccion;
+        string titulo_lugar;
 
         ParseObject plan;
 
@@ -61,22 +62,11 @@ namespace PlansPop
             editMap.TiltInteractionMode = MapInteractionMode.GestureAndControl;
             editMap.MapServiceToken = "ift37edNFjWtwMkOrquL~7gzuj1f0EWpVbWWsBaVKtA~Amh-DIg5R0ZPETQo7V-k2m785NG8XugPBOh52EElcvxaioPYSYWXf96wL6E_0W1g";
 
-            // Specify a known location
 
-            BasicGeoposition posicion = new BasicGeoposition() { Latitude = 2.4448143, Longitude = -76.6147395 };
-            Geopoint point = new Geopoint(posicion);
-
-            // Set map location
-            editMap.Center = point;
-            editMap.ZoomLevel = 13.0f;
-            editMap.LandmarksVisible = true;
-
-            AddIcons();
         }
 
-        private async void AddIcons()
+        private async void AddIcons(ParseGeoPoint lugarPlanEdit)
         {
-
             ParseQuery<ParseObject> query = ParseObject.GetQuery("Lugares");
             IEnumerable<ParseObject> results = await query.FindAsync();
             ParseObject lugar;
@@ -84,6 +74,9 @@ namespace PlansPop
             BasicGeoposition position;
             Geopoint point;
             MapIcon mapIcon;
+
+            //posicion actual
+            getPosicionActual();
 
             // Agregarlos al mapa
             int tamanio = results.Count<ParseObject>();
@@ -94,15 +87,24 @@ namespace PlansPop
 
                 lugar = results.ElementAt<ParseObject>(i);
                 ubicacion = lugar.Get<ParseGeoPoint>("ubicacion");
-                //Icon
+
                 position = new BasicGeoposition() { Latitude = ubicacion.Latitude, Longitude = ubicacion.Longitude };
                 point = new Geopoint(position);
+
                 // MapIcon
                 mapIcon = new MapIcon();
                 mapIcon.Location = point;
                 mapIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
                 mapIcon.Title = lugar.Get<string>("direccion");
-                mapIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/bus.png"));
+
+                if (ubicacion.Latitude == lugarPlanEdit.Latitude && ubicacion.Longitude == lugarPlanEdit.Longitude)
+                {
+                    mapIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/posicionPlan.png"));
+                }
+                else
+                {
+                    mapIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/bus.png"));
+                }
                 mapIcon.ZIndex = 0;
 
                 editMap.MapElements.Add(mapIcon);
@@ -110,6 +112,40 @@ namespace PlansPop
             }
 
         }
+
+        private async void getPosicionActual()
+        {
+            var accessStatus = await Geolocator.RequestAccessAsync();
+
+            switch (accessStatus)
+            {
+                case GeolocationAccessStatus.Allowed:
+
+                    Geolocator myGeolocator = new Geolocator();
+                    Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync();
+                    Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
+
+                    MapIcon posicionActual = new MapIcon();
+                    posicionActual.Location = myGeocoordinate.Point;
+                    posicionActual.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                    posicionActual.Title = "MiPosicion";
+                    posicionActual.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/posicion_actual.png"));
+                    posicionActual.ZIndex = 0;
+                    editMap.MapElements.Add(posicionActual);
+
+                    break;
+
+                case GeolocationAccessStatus.Denied:
+
+                    break;
+
+                case GeolocationAccessStatus.Unspecified:
+
+                    break;
+            }
+
+        }
+
 
         private void EditPlan_BackRequested(object sender, BackRequestedEventArgs e)
         {
@@ -123,7 +159,6 @@ namespace PlansPop
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             planitem = e.Parameter as PlanItem;
-
             plan = planitem.obj;
 
             editNombre.Text = plan.Get<string>("nombre");
@@ -150,6 +185,21 @@ namespace PlansPop
             editImage.Source = img;
 
             NombreLugarTxt.Text = plan.Get<string>("direccion");
+
+            gPoint = plan.Get<ParseGeoPoint>("lugar");
+
+            // Specify a known location
+
+            BasicGeoposition posicion = new BasicGeoposition() { Latitude = gPoint.Latitude, Longitude = gPoint.Longitude };
+            Geopoint point = new Geopoint(posicion);
+
+            // Set map location
+            editMap.Center = point;
+            editMap.ZoomLevel = 17.0f;
+            editMap.LandmarksVisible = true;
+
+
+            AddIcons(gPoint);
 
         }
 
@@ -237,23 +287,26 @@ namespace PlansPop
 
             if (result.Id.Equals(1))
             {
+                var res = await contentDialog.ShowAsync();
 
+                edtProgressRing.IsActive = true;
                 BasicGeoposition pos = new BasicGeoposition() { Latitude = args.Location.Position.Latitude, Longitude = args.Location.Position.Longitude }; ;
                 Geopoint point = new Geopoint(pos);
 
                 MapLocationFinderResult LocationAdress = await MapLocationFinder.FindLocationsAtAsync(point);
-                direccion = LocationAdress.Locations[0].Address.Street + "--" + LocationAdress.Locations[0].Address.StreetNumber + ", "
+                direccion = LocationAdress.Locations[0].Address.Street + "-" + LocationAdress.Locations[0].Address.StreetNumber + ", "
                                + LocationAdress.Locations[0].Address.Country + ", " + LocationAdress.Locations[0].Address.Town;
 
 
                 MapIcon mapIcon = new MapIcon();
                 mapIcon.Location = point;
                 mapIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-                mapIcon.Title = direccion;
+                mapIcon.Title = titulo_lugar + " - " + direccion;
                 mapIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/bus.png"));
                 mapIcon.ZIndex = 0;
 
                 editMap.MapElements.Add(mapIcon);
+                edtProgressRing.IsActive = false;
             }
         }
 
@@ -263,39 +316,61 @@ namespace PlansPop
             double ArgsLat = 0;
             double ArgsLon = 0;
 
-            foreach (var e in args.MapElements)
+            if (btnEditSiguiente.Visibility == Visibility.Visible)
             {
-                var icon = e as MapIcon;
-                dir = icon.Title;
-                ArgsLat = icon.Location.Position.Latitude;
-                ArgsLon = icon.Location.Position.Longitude;
 
-            }
-
-            var dialog = new Windows.UI.Popups.MessageDialog("Elegir Lugar");
-
-            dialog.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
-            dialog.Commands.Add(new Windows.UI.Popups.UICommand("Cancelar") { Id = 0 });
-
-            var result = await dialog.ShowAsync();
-
-            if (result.Id.Equals(1))
-            {
-                gPoint = new ParseGeoPoint(ArgsLat, ArgsLon);
-
-                if (direccion == null)
+                foreach (var e in args.MapElements)
                 {
-                    nuevo_existente = 1; // lugar existente
-                    NombreLugarTxt.Text = dir;
-                }
-                else
-                {
-                    nuevo_existente = 2; // nuevo lugar
-                    NombreLugarTxt.Text = direccion;
-                    direccion = null;
+                    var icon = e as MapIcon;
+                    dir = icon.Title;
+                    ArgsLat = icon.Location.Position.Latitude;
+                    ArgsLon = icon.Location.Position.Longitude;
+
                 }
 
+                if (!dir.Equals("MiPosicion"))
+                {
+
+                    if (gPoint.Latitude == ArgsLat && gPoint.Longitude == ArgsLon) // si el lugar seleccionado es el lugar del plan
+                    {
+                        var dialog = new Windows.UI.Popups.MessageDialog("Este es el lugar");
+
+                        dialog.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
+                        //dialog.Commands.Add(new Windows.UI.Popups.UICommand("Cancelar") { Id = 0 });
+
+                        var result = await dialog.ShowAsync();
+                    }
+                    else
+                    {
+                        var dialog = new Windows.UI.Popups.MessageDialog("Elegir Lugar");
+
+                        dialog.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
+                        dialog.Commands.Add(new Windows.UI.Popups.UICommand("Cancelar") { Id = 0 });
+
+                        var result = await dialog.ShowAsync();
+
+                        if (result.Id.Equals(1))
+                        {
+                            gPoint.Latitude = ArgsLat;
+                            gPoint.Longitude = ArgsLon;
+                            NombreLugarTxt.Text = dir;
+                            if (direccion == null)
+                            {
+                                nuevo_existente = 1; // lugar existente
+
+                            }
+                            else
+                            {
+                                nuevo_existente = 2; // nuevo lugar
+
+                                direccion = null;
+                            }
+
+                        }
+                    }
+                }
             }
+            
 
         }
 
@@ -310,25 +385,22 @@ namespace PlansPop
 
             plan["fecha"] = organizarFecha + " " + organizarHora;
             plan["direccion"] = NombreLugarTxt.Text;
+            plan["lugar"] = gPoint;
             if (photo != null)
             {
                 var bytes = await GetBtyeFromFile(photo);
-                ParseFile parseFile = new ParseFile(editNombre.Text + ".jpg", bytes, "image/jpeg");
+                ParseFile parseFile = new ParseFile("editdefault" + editHora.Time.Minutes + ".jpg", bytes, "image/jpeg");
                 plan["imagen"] = parseFile;
 
             }
-
-            if (!gPoint.Latitude.Equals(0) && !gPoint.Longitude.Equals(0))
+            if (nuevo_existente == 2) // crear nuevo lugar
             {
-                plan["lugar"] = gPoint;
-                if (nuevo_existente == 2) // crear nuevo lugar
-                {
-                    ParseObject objectLugar = new ParseObject("Lugares");
-                    objectLugar.Add("nombre", direccion);
-                    objectLugar.Add("direccion", direccion);
-                    objectLugar.Add("ubicacion", gPoint);
-                    await objectLugar.SaveAsync();
-                }
+                ParseObject objectLugar = new ParseObject("Lugares");
+                objectLugar.Add("nombre", NombreLugarTxt.Text);
+                objectLugar.Add("direccion", NombreLugarTxt.Text);
+                objectLugar.Add("ubicacion", gPoint);
+                await objectLugar.SaveAsync();
+
             }
             try
             {
@@ -385,6 +457,20 @@ namespace PlansPop
             }
         }
 
+        private void contentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            titulo_lugar = tituloLugar.Text;
+        }
 
+        private void edit_plan_btn(object sender, RoutedEventArgs e)
+        {
+            btn_en_edt.Visibility = Visibility.Collapsed;
+            btnEditSiguiente.Visibility = Visibility.Visible;
+            editNombre.IsEnabled = true;
+            editDescripcion.IsEnabled = true;
+            editFecha.IsEnabled = true;
+            editHora.IsEnabled = true;
+        }
     }
 }
+

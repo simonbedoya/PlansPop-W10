@@ -26,8 +26,9 @@ namespace PlansPop
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        
 
+        string msg;
+        
         public MainPage()
         {      
                   
@@ -148,13 +149,19 @@ namespace PlansPop
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string msg = e.Parameter as string;
+            msg = e.Parameter as string;
             if (msg == null)
             {
                 MainFrame.Navigate(typeof(Planes));
             }
             else {
-                MainFrame.Navigate(typeof(ProfilePage));
+                switch (msg) {
+                    case "1":
+                        MainFrame.Navigate(typeof(ProfilePage));
+                        break;
+                    
+                }
+                
             }
 
         }

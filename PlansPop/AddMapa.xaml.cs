@@ -36,6 +36,8 @@ namespace PlansPop
 
         int crearLugar = -1;
 
+        string titulo_lugar;
+
         public AddMapa()
         {
             this.InitializeComponent();
@@ -92,6 +94,7 @@ namespace PlansPop
             // Agregarlos al mapa
             int tamanio = results.Count<ParseObject>();
 
+            getPosicionActual();
 
             for (int i = 0; i < tamanio; i++)
             {
@@ -116,30 +119,67 @@ namespace PlansPop
 
         }
 
+        private async void getPosicionActual()
+        {
+            var accessStatus = await Geolocator.RequestAccessAsync();
+
+            switch (accessStatus)
+            {
+                case GeolocationAccessStatus.Allowed:
+
+                    Geolocator myGeolocator = new Geolocator();
+                    Geoposition myGeoposition = await myGeolocator.GetGeopositionAsync();
+                    Geocoordinate myGeocoordinate = myGeoposition.Coordinate;
+
+                    MapIcon posicionActual = new MapIcon();
+                    posicionActual.Location = myGeocoordinate.Point;
+                    posicionActual.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                    posicionActual.Title = "MiPosicion";
+                    posicionActual.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/posicion_actual.png"));
+                    posicionActual.ZIndex = 0;
+                    mapControl.MapElements.Add(posicionActual);
+
+                    break;
+
+                case GeolocationAccessStatus.Denied:
+
+                    break;
+
+                case GeolocationAccessStatus.Unspecified:
+
+                    break;
+            }
+
+        }
+
+
         private async void MapTapped(MapControl sender, MapInputEventArgs args)
         {
 
             var dialog = new Windows.UI.Popups.MessageDialog("Agregar este lugar");
+
             dialog.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
             dialog.Commands.Add(new Windows.UI.Popups.UICommand("Cancelar") { Id = 0 });
             var result = await dialog.ShowAsync();
 
             if (result.Id.Equals(1))
             {
+                var res = await contentDialog.ShowAsync();
+
                 crearLugar = 1;
                 progressRing.IsActive = true;
                 BasicGeoposition pos = new BasicGeoposition() { Latitude = args.Location.Position.Latitude, Longitude = args.Location.Position.Longitude }; ;
                 Geopoint point = new Geopoint(pos);
 
                 MapLocationFinderResult LocationAdress = await MapLocationFinder.FindLocationsAtAsync(point);
-                string direccion = LocationAdress.Locations[0].Address.Street + "--" + LocationAdress.Locations[0].Address.StreetNumber + ", "
+                string direccion = LocationAdress.Locations[0].Address.Street + "-" + LocationAdress.Locations[0].Address.StreetNumber + ", "
                                + LocationAdress.Locations[0].Address.Country + ", " + LocationAdress.Locations[0].Address.Town;
 
 
                 MapIcon mapIcon = new MapIcon();
                 mapIcon.Location = point;
                 mapIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
-                mapIcon.Title = direccion;
+                mapIcon.Title = titulo_lugar + " - " + direccion;
                 mapIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/bus.png"));
                 mapIcon.ZIndex = 0;
 
@@ -163,66 +203,68 @@ namespace PlansPop
                 ArgsLon = icon.Location.Position.Longitude;
 
             }
-
-            var dialog = new Windows.UI.Popups.MessageDialog("Elegir Lugar");
-
-            dialog.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
-            dialog.Commands.Add(new Windows.UI.Popups.UICommand("Cancelar") { Id = 0 });
-
-            var result = await dialog.ShowAsync();
-
-            if (result.Id.Equals(1))
+            if (!dir.Equals("MiPosicion"))
             {
-                progressRing.IsActive = true;
+                var dialog = new Windows.UI.Popups.MessageDialog("Elegir Lugar");
 
-                StorageFile file = plan.ImagenPlan;
-                var bytes = await GetBtyeFromFile(file);
+                dialog.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
+                dialog.Commands.Add(new Windows.UI.Popups.UICommand("Cancelar") { Id = 0 });
 
-                ParseFile parseFile = new ParseFile("defaultimg.jpg", bytes, "image/jpeg");
+                var result = await dialog.ShowAsync();
 
-                ParseObject parseObject = new ParseObject("Plan");
-
-
-                parseObject.Add("nombre", plan.NombrePlan);
-                parseObject.Add("descripcion", plan.DescripcionPlan);
-                parseObject.Add("fecha", plan.FechaPlan + " " + plan.HoraPlan);
-                parseObject.Add("id_user", ParseUser.CurrentUser);
-                parseObject.Add("imagen", parseFile);
-
-                ParseGeoPoint geoLugar = new ParseGeoPoint(ArgsLat, ArgsLon);
-                parseObject.Add("lugar", geoLugar);
-
-                parseObject.Add("direccion", dir);
-
-                if (crearLugar == 1)
+                if (result.Id.Equals(1))
                 {
+                    progressRing.IsActive = true;
 
-                    ParseObject objectLugar = new ParseObject("Lugares");
-                    objectLugar.Add("nombre", dir);
-                    objectLugar.Add("direccion", dir);
-                    objectLugar.Add("ubicacion", geoLugar);
-                    await objectLugar.SaveAsync();
-                    crearLugar = -1;
+                    StorageFile file = plan.ImagenPlan;
+                    var bytes = await GetBtyeFromFile(file);
+
+                    ParseFile parseFile = new ParseFile("defaultimg.jpg", bytes, "image/jpeg");
+
+                    ParseObject parseObject = new ParseObject("Plan");
+
+
+                    parseObject.Add("nombre", plan.NombrePlan);
+                    parseObject.Add("descripcion", plan.DescripcionPlan);
+                    parseObject.Add("fecha", plan.FechaPlan + " " + plan.HoraPlan);
+                    parseObject.Add("id_user", ParseUser.CurrentUser);
+                    parseObject.Add("imagen", parseFile);
+
+                    ParseGeoPoint geoLugar = new ParseGeoPoint(ArgsLat, ArgsLon);
+                    parseObject.Add("lugar", geoLugar);
+
+                    parseObject.Add("direccion", dir);
+
+                    if (crearLugar == 1)
+                    {
+
+                        ParseObject objectLugar = new ParseObject("Lugares");
+                        objectLugar.Add("nombre", titulo_lugar);
+                        objectLugar.Add("direccion", dir);
+                        objectLugar.Add("ubicacion", geoLugar);
+                        await objectLugar.SaveAsync();
+                        crearLugar = -1;
+                    }
+
+                    try
+                    {
+                        await parseObject.SaveAsync();
+
+                        progressRing.IsActive = false;
+                        rootFrame = Window.Current.Content as Frame;
+                        rootFrame.Navigate(typeof(MainPage));
+
+                    }
+                    catch
+                    {
+                        var dialog2 = new Windows.UI.Popups.MessageDialog("Error al crear el plan, intentalo de nuevo");
+                        dialog2.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
+                        var result2 = await dialog2.ShowAsync();
+                        progressRing.IsActive = false;
+                    }
+
+
                 }
-
-                try
-                {
-                    await parseObject.SaveAsync();
-
-                    progressRing.IsActive = false;
-                    rootFrame = Window.Current.Content as Frame;
-                    rootFrame.Navigate(typeof(MainPage));
-
-                }
-                catch
-                {
-                    var dialog2 = new Windows.UI.Popups.MessageDialog("Error al crear el plan, intentalo de nuevo");
-                    dialog2.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
-                    var result2 = await dialog2.ShowAsync();
-                    progressRing.IsActive = false;
-                }
-
-
             }
 
         }
@@ -247,5 +289,9 @@ namespace PlansPop
             }
         }
 
+        private void contentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            titulo_lugar = tituloLugar.Text;
+        }
     }
 }

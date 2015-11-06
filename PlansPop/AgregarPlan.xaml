@@ -21,25 +21,59 @@
                        Style="{StaticResource SubtitleTextBlockStyle}"
                        HorizontalAlignment="Center"
                        />
-            <StackPanel Padding="10">
-
-                <Image x:Name="imageControl" Width="600" Height="250"
-                       Source="/Assets/fotoplan.jpg"/>
-
-                <Grid Width="300" HorizontalAlignment="Center" Margin="0,10,0,10"
-                          >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="btnElegirFoto" Content="Elegir una Foto"
-                                Grid.Column="0"
-                                HorizontalAlignment="Center" Click="onClickElegirFoto"/>
-                    <Button x:Name="btnTomarFoto" Content="Tomar una Foto"
-                                Grid.Column="1"
-                                HorizontalAlignment="Center" Click="onClickTomarFoto"/>
-                </Grid>
-            </StackPanel>
+            <RelativePanel HorizontalAlignment="Center">
+                <Image x:Name="imageControl" Width="450" Height="350"
+                       Source="/Assets/fotoplan.jpg"
+                       Margin="0 10 0 0"/>
+                <StackPanel Orientation="Horizontal" 
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True"
+                            Margin="0 0 0 10">
+                    <Button x:Name="btnElegirFoto" 
+                             Grid.Column="0"
+                             HorizontalAlignment="Center"
+                             Margin="0 0 10 0"
+                             Background="White"
+                             Foreground="Black" Click="onClickElegirFoto">
+                        <SymbolIcon Symbol="Add" Width="30" Height="30"/>
+                    </Button>
+                    <Button x:Name="btnTomarFoto" 
+                             Grid.Column="1"
+                             HorizontalAlignment="Center"
+                             Background="White"
+                             Foreground="Black" Click="onClickTomarFoto">
+                        <SymbolIcon Symbol="Camera" Width="30" Height="30"/>
+                    </Button>
+                </StackPanel>
+                <StackPanel RelativePanel.AlignBottomWithPanel="True"
+                                Width="300"
+                                Height="40"
+                                x:Name="panel_photo_update"
+                                Orientation="Horizontal">
+                    <ProgressRing
+                              x:Name="PrgRing2" 
+                              IsActive="True" 
+                              Visibility="Collapsed"
+                              Margin="20 0 0 0"
+                              Width="40"
+                              Height="40"/>
+                    <SymbolIcon Symbol="Accept"
+                            x:Name="accept_photo"
+                            Margin="20 0 0 0"
+                            Foreground="Red"
+                            Width="40"
+                            Height="40"
+                            Visibility="Collapsed"/>
+                    <TextBlock x:Name="error_photo"
+                           
+                           Foreground="Red"
+                           TextAlignment="Left"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Visibility="Collapsed"/>
+                </StackPanel>
+            </RelativePanel>
+            
             <StackPanel HorizontalAlignment="Center">
                 <TextBox x:Name="nombrePlan"
                              PlaceholderText="Nombre"
@@ -51,7 +85,7 @@
                              PlaceholderText="Descripcion"
                              HorizontalAlignment="Left"
                              Width="600"
-                             Margin="0,0,0,10"
+                             Margin="0,10,0,10"
                              />
                 <Grid Width="600"
                           HorizontalAlignment="Left">
@@ -61,16 +95,19 @@
                     </Grid.ColumnDefinitions>
 
                     <DatePicker x:Name="fechaPlan" Header="Fecha" Grid.Column="0" Grid.Row="0"
-                                HorizontalAlignment="Left" 
+                                HorizontalAlignment="Left" Margin="0 15 0 0"
                                 />
                     <TimePicker x:Name="horaPlan" Header="Hora" Grid.Column="1" Grid.Row="0"
-                                HorizontalAlignment="Right"/>
+                                HorizontalAlignment="Right"
+                                Margin="0 15 0 0"/>
 
                 </Grid>
-                <Button x:Name="btnSiguiente" Grid.Column="1" Margin="0,5,20,0"
+                <Button x:Name="btnSiguiente" Grid.Column="1" Margin="0 15 0 0"
                         Grid.Row="1"
                         HorizontalAlignment="Right"
-                        Content="Siguiente" Click="onClickSiguiente"/>
+                        Click="onClickSiguiente">
+                    <SymbolIcon Symbol="Forward" Width="30" Height="30" />
+                </Button>
             </StackPanel>
 
         </StackPanel>
