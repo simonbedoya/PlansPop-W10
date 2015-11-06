@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,11 +30,27 @@ namespace PlansPop
 
             this.InitializeComponent();
             this.ViewModel = new PlanItemViewModel();
+
+            this.NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         public PlanItemViewModel ViewModel { get; set; }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility
+                    = AppViewBackButtonVisibility.Collapsed;
+            PlanesGrid.SelectedIndex = -1;
+        }
 
+        private void PlanesGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PlanesGrid.SelectedIndex != -1)
+            {
+                Frame rootFrame = Window.Current.Content as Frame;
 
+                rootFrame.Navigate(typeof(VerPlan), ViewModel.PlanItems.ElementAt(PlanesGrid.SelectedIndex));
+            }
+        }
     }
 }

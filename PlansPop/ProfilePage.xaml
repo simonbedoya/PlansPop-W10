@@ -1,0 +1,169 @@
+﻿<Page
+    x:Class="PlansPop.ProfilePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PlansPop"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <RelativePanel>
+        <StackPanel Padding="10" x:Name="image">
+                <RelativePanel>
+            <Image x:Name="imageControl" Width="450" Height="350"
+                       Source="/Assets/fotoplan.jpg"/>
+                <StackPanel Orientation="Horizontal" 
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignBottomWithPanel="True">
+                     <Button x:Name="btnElegirFoto" 
+                             Grid.Column="0"
+                             HorizontalAlignment="Center"
+                             Margin="0 0 10 0"
+                             Background="White"
+                             Foreground="Black" Click="btn_elegirfoto">
+                        <SymbolIcon Symbol="Add" Width="30" Height="30"/>
+                     </Button>
+                     <Button x:Name="btnTomarFoto" 
+                             Grid.Column="1"
+                             HorizontalAlignment="Center"
+                             Background="White"
+                             Foreground="Black" Click="btn_tomarfoto">
+                        <SymbolIcon Symbol="Camera" Width="30" Height="30"/>
+                     </Button>
+                </StackPanel>
+                    <StackPanel RelativePanel.AlignBottomWithPanel="True"
+                                Width="300"
+                                Height="40"
+                                x:Name="panel_photo_update"
+                                Orientation="Horizontal">
+                        <ProgressRing
+                              x:Name="PrgRing2" 
+                              IsActive="True" 
+                              Visibility="Collapsed"
+                              Margin="20 0 0 0"
+                              Width="40"
+                              Height="40"/>
+                        <SymbolIcon Symbol="Accept"
+                            x:Name="accept_photo"
+                            Margin="20 0 0 0"
+                            Foreground="Red"
+                            Width="40"
+                            Height="40"
+                            Visibility="Collapsed"/>
+                        <TextBlock x:Name="error_photo"
+                           
+                           Foreground="Red"
+                           TextAlignment="Left"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Visibility="Collapsed"/>
+                    </StackPanel>
+                </RelativePanel>
+            </StackPanel >
+            <StackPanel Width="500"
+                        Height="520"
+                        RelativePanel.RightOf="image"
+                        Padding="10"
+                        x:Name="info">
+                
+                <TextBlock Text="Nombre:"
+                           FontSize="25"/>
+                <TextBox x:Name="name"
+                           FontSize="20"
+                           Margin="0 10 0 0"
+                         InputScope="AlphanumericFullWidth"
+                         IsEnabled="False"
+                         Foreground="Black"/>
+                <TextBlock Text="Correo Electrónico:"
+                           FontSize="25"
+                           Margin="0 25 0 0"/>
+                <TextBlock x:Name="mail"
+                           FontSize="20"
+                           Margin="0 10 0 0"
+                           Foreground="Black"/>
+                <TextBlock Text="Sexo:"
+                           FontSize="25"
+                           Margin="0 25 0 0"
+                           Foreground="Black"/>
+                <ComboBox x:Name="sex"
+                          FontSize="20"
+                          Margin="0 10 0 0"
+                          Foreground="Black"
+                          IsEnabled="False"
+                          Width="150">
+                    <ComboBoxItem>Mujer</ComboBoxItem>
+                    <ComboBoxItem>Hombre</ComboBoxItem>
+                </ComboBox>
+               <TextBlock Text="Fecha de nacimiento:"
+                          FontSize="25"
+                          Margin="0 25 0 0"
+                          Foreground="Black"/>
+                <DatePicker x:Name="birth_date"
+                            FontSize="20"
+                            Foreground="Black"
+                            IsEnabled="False"
+                            Margin="0 10 0 0"
+                            />
+                <TextBlock Text="Usuario:"
+                           FontSize="25"
+                           Margin="0 25 0 0"
+                           Foreground="Black"/>
+                <TextBlock x:Name="txt_user"
+                           FontSize="20"
+                           Foreground="Black"
+                           Margin="0 10 0 0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" RelativePanel.Below="info"
+                        RelativePanel.RightOf="image"
+                        Width="500"
+                        x:Name="panel_edit">
+                <Button x:Name="btn_edit"
+                        Margin="450 0 0 0" Click="edit">
+                    <SymbolIcon Symbol="Edit" Width="30"
+                                Height="30"/>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" RelativePanel.Below="info"
+                        RelativePanel.RightOf="image"
+                        Width="500"
+                        x:Name="panel_save"
+                        Visibility="Collapsed">
+                    <Button x:Name="btn_save"
+                            
+                        Margin="450 0 0 0" Click="save">
+                        <SymbolIcon Symbol="Save" Width="30"
+                                    Height="30"/>
+                    </Button>
+                </StackPanel>
+            <StackPanel Orientation="Horizontal" RelativePanel.Below="info"
+                        RelativePanel.RightOf="image"
+                        Width="500"
+                        Height="40"
+                        x:Name="panel_saving"
+                        Visibility="Visible">
+                <ProgressRing
+                              x:Name="PrgRing" 
+                              IsActive="True" 
+                              Visibility="Collapsed"
+                              Margin="200 0 0 0"
+                              Width="40"
+                              Height="40"/>
+                <SymbolIcon Symbol="Accept"
+                            x:Name="accept"
+                            Margin="200 -10 0 0"
+                            Width="60"
+                            Height="60"
+                            Visibility="Collapsed"/>
+                <TextBlock x:Name="error"
+                           Text="No se pudo actualizar."
+                           Foreground="Red"
+                           TextAlignment="Left"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           Visibility="Collapsed"/>
+                    
+            </StackPanel>
+        </RelativePanel>
+    </Grid>
+</Page>

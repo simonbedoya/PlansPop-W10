@@ -33,14 +33,14 @@
                             Width="50" Height="50"
                             Margin="20 5 0 0">
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="http://theaudiophilegroup.ky/wp-content/uploads/2014/06/person-icon.png"/>
+                                <ImageBrush x:Name="image" ImageSource="http://theaudiophilegroup.ky/wp-content/uploads/2014/06/person-icon.png"/>
                             </Ellipse.Fill>
                         </Ellipse>
                         <Button                            
                             RelativePanel.AlignTopWithPanel="True"
                             RelativePanel.AlignRightWithPanel="True"
                             Margin="10"
-                            Background="Transparent">
+                            Background="Transparent" Click="btn_profile">
                             <SymbolIcon Symbol="Setting" Foreground="White" />
                         </Button>
                         <TextBlock 

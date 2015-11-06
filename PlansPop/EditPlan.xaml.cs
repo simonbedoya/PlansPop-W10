@@ -5,11 +5,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Imaging;
 using Windows.Media.Capture;
+using Windows.Services.Maps;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
@@ -36,17 +38,14 @@ namespace PlansPop
         Frame rootFrame;
         PlanItem planitem;
 
-        StorageFile photo;
+        StorageFile photo = null;
 
-       // ParseObject parseObj;
+        ParseGeoPoint gPoint;
+        string direccion;
 
+        ParseObject plan;
 
-        private string imgURL = "http://files.parsetfss.com/b5b17f71-5029-472e-9a5a-080cf10284b3/tfss-90911fe4-2118-41ee-83ca-04def59d0512-piscina.jpg";
-        public string ImgURL
-        {
-            get { return imgURL; }
-            set { imgURL = value; }
-        }
+        int nuevo_existente = -1;
 
         public EditPlan()
         {
@@ -72,6 +71,7 @@ namespace PlansPop
             editMap.ZoomLevel = 13.0f;
             editMap.LandmarksVisible = true;
 
+            AddIcons();
         }
 
         private async void AddIcons()
@@ -124,7 +124,7 @@ namespace PlansPop
         {
             planitem = e.Parameter as PlanItem;
 
-            ParseObject plan = planitem.obj;
+            plan = planitem.obj;
 
             editNombre.Text = plan.Get<string>("nombre");
             editDescripcion.Text = plan.Get<string>("descripcion");
@@ -228,22 +228,163 @@ namespace PlansPop
             editImage.Source = bitmapSource;
         }
 
-        private void editMapTapped(MapControl sender, MapInputEventArgs args)
+        private async void editMapTapped(MapControl sender, MapInputEventArgs args)
         {
+            var dialog = new Windows.UI.Popups.MessageDialog("Agregar este lugar");
+            dialog.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
+            dialog.Commands.Add(new Windows.UI.Popups.UICommand("Cancelar") { Id = 0 });
+            var result = await dialog.ShowAsync();
+
+            if (result.Id.Equals(1))
+            {
+
+                BasicGeoposition pos = new BasicGeoposition() { Latitude = args.Location.Position.Latitude, Longitude = args.Location.Position.Longitude }; ;
+                Geopoint point = new Geopoint(pos);
+
+                MapLocationFinderResult LocationAdress = await MapLocationFinder.FindLocationsAtAsync(point);
+                direccion = LocationAdress.Locations[0].Address.Street + "--" + LocationAdress.Locations[0].Address.StreetNumber + ", "
+                               + LocationAdress.Locations[0].Address.Country + ", " + LocationAdress.Locations[0].Address.Town;
+
+
+                MapIcon mapIcon = new MapIcon();
+                mapIcon.Location = point;
+                mapIcon.NormalizedAnchorPoint = new Point(0.5, 1.0);
+                mapIcon.Title = direccion;
+                mapIcon.Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/bus.png"));
+                mapIcon.ZIndex = 0;
+
+                editMap.MapElements.Add(mapIcon);
+            }
+        }
+
+        private async void editElementClick(MapControl sender, MapElementClickEventArgs args)
+        {
+            string dir = null;
+            double ArgsLat = 0;
+            double ArgsLon = 0;
+
+            foreach (var e in args.MapElements)
+            {
+                var icon = e as MapIcon;
+                dir = icon.Title;
+                ArgsLat = icon.Location.Position.Latitude;
+                ArgsLon = icon.Location.Position.Longitude;
+
+            }
+
+            var dialog = new Windows.UI.Popups.MessageDialog("Elegir Lugar");
+
+            dialog.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
+            dialog.Commands.Add(new Windows.UI.Popups.UICommand("Cancelar") { Id = 0 });
+
+            var result = await dialog.ShowAsync();
+
+            if (result.Id.Equals(1))
+            {
+                gPoint = new ParseGeoPoint(ArgsLat, ArgsLon);
+
+                if (direccion == null)
+                {
+                    nuevo_existente = 1; // lugar existente
+                    NombreLugarTxt.Text = dir;
+                }
+                else
+                {
+                    nuevo_existente = 2; // nuevo lugar
+                    NombreLugarTxt.Text = direccion;
+                    direccion = null;
+                }
+
+            }
 
         }
 
-        private void editElementClick(MapControl sender, MapElementClickEventArgs args)
+        private async void onClickEditSiguiente(object sender, RoutedEventArgs e)
         {
+            string organizarFecha = editFecha.Date.Day + "/" + editFecha.Date.Month + "/" + editFecha.Date.Year;
+            string organizarHora = configurarHora(editHora.Time.Hours, editHora.Time.Minutes);
+
+            edtProgressRing.IsActive = true;
+            plan["nombre"] = editNombre.Text;
+            plan["descripcion"] = editDescripcion.Text;
+
+            plan["fecha"] = organizarFecha + " " + organizarHora;
+            plan["direccion"] = NombreLugarTxt.Text;
+            if (photo != null)
+            {
+                var bytes = await GetBtyeFromFile(photo);
+                ParseFile parseFile = new ParseFile(editNombre.Text + ".jpg", bytes, "image/jpeg");
+                plan["imagen"] = parseFile;
+
+            }
+
+            if (!gPoint.Latitude.Equals(0) && !gPoint.Longitude.Equals(0))
+            {
+                plan["lugar"] = gPoint;
+                if (nuevo_existente == 2) // crear nuevo lugar
+                {
+                    ParseObject objectLugar = new ParseObject("Lugares");
+                    objectLugar.Add("nombre", direccion);
+                    objectLugar.Add("direccion", direccion);
+                    objectLugar.Add("ubicacion", gPoint);
+                    await objectLugar.SaveAsync();
+                }
+            }
+            try
+            {
+                await plan.SaveAsync();
+                edtProgressRing.IsActive = false;
+                rootFrame = Window.Current.Content as Frame;
+                rootFrame.Navigate(typeof(MainPage));
+            }
+            catch
+            {
+                var dialog2 = new Windows.UI.Popups.MessageDialog("Error al editar el plan");
+                dialog2.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
+                var result2 = await dialog2.ShowAsync();
+            }
 
         }
 
-        private void onClickEditSiguiente(object sender, RoutedEventArgs e)
+        private string configurarHora(int hourOfDay, int minute)
         {
+            string am_pm;
+            string horaC;
 
+            if (hourOfDay < 12)
+            {
+                am_pm = "AM";
+                if (hourOfDay == 0) { hourOfDay = 12; }
+            }
+            else
+            {
+                am_pm = "PM";
+                if (hourOfDay != 12) { hourOfDay = hourOfDay - 12; }
+            }
+            if (hourOfDay < 10)
+            {
+                if (minute < 10) { horaC = "0" + hourOfDay + ":" + "0" + minute + " " + am_pm; }
+                else { horaC = "0" + hourOfDay + ":" + minute + " " + am_pm; }
+            }
+            else { horaC = hourOfDay + ":" + minute + " " + am_pm; }
+            return horaC;
+        }
+
+
+        private async Task<byte[]> GetBtyeFromFile(StorageFile storageFile)
+        {
+            var stream = await storageFile.OpenReadAsync();
+
+            using (var dataReader = new DataReader(stream))
+            {
+                var bytes = new byte[stream.Size];
+                await dataReader.LoadAsync((uint)stream.Size);
+                dataReader.ReadBytes(bytes);
+
+                return bytes;
+            }
         }
 
 
     }
 }
-

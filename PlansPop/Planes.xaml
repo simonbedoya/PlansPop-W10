@@ -10,9 +10,9 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <GridView
-                    x:Name="grid"
+                    x:Name="PlanesGrid"
                     ItemsSource="{x:Bind ViewModel.PlanItems}"
-                    Margin="0"
+                    Margin="0" SelectionChanged="PlanesGrid_SelectionChanged"
                     >
             <GridView.ItemTemplate>
                 <DataTemplate x:DataType="models:PlanItem">

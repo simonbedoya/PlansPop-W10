@@ -9,6 +9,7 @@
     xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="650"/>
             <ColumnDefinition/>
@@ -87,9 +88,13 @@
             </StackPanel>
 
         </StackPanel>
+
         <StackPanel Padding="30" Grid.Column="1" >
             <Maps:MapControl x:Name="editMap" 
                              Height="600"  MapHolding="editMapTapped" MapElementClick="editElementClick"/>
         </StackPanel>
+        <ProgressRing 
+            x:Name="edtProgressRing" IsActive="False" Height="90" Width="90" 
+            />
     </Grid>
 </Page>

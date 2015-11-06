@@ -33,7 +33,8 @@ namespace PlansPop
     {
         private Frame rootFrame;
         private Plan plan;
-        private string direccion;
+
+        int crearLugar = -1;
 
         public AddMapa()
         {
@@ -125,12 +126,13 @@ namespace PlansPop
 
             if (result.Id.Equals(1))
             {
-
+                crearLugar = 1;
+                progressRing.IsActive = true;
                 BasicGeoposition pos = new BasicGeoposition() { Latitude = args.Location.Position.Latitude, Longitude = args.Location.Position.Longitude }; ;
                 Geopoint point = new Geopoint(pos);
 
                 MapLocationFinderResult LocationAdress = await MapLocationFinder.FindLocationsAtAsync(point);
-                direccion = LocationAdress.Locations[0].Address.Street + "--" + LocationAdress.Locations[0].Address.StreetNumber + ", "
+                string direccion = LocationAdress.Locations[0].Address.Street + "--" + LocationAdress.Locations[0].Address.StreetNumber + ", "
                                + LocationAdress.Locations[0].Address.Country + ", " + LocationAdress.Locations[0].Address.Town;
 
 
@@ -142,6 +144,7 @@ namespace PlansPop
                 mapIcon.ZIndex = 0;
 
                 mapControl.MapElements.Add(mapIcon);
+                progressRing.IsActive = false;
             }
 
         }
@@ -174,9 +177,12 @@ namespace PlansPop
 
                 StorageFile file = plan.ImagenPlan;
                 var bytes = await GetBtyeFromFile(file);
-                ParseFile parseFile = new ParseFile(plan.NombrePlan + ".jpg", bytes, "image/jpeg");
+
+                ParseFile parseFile = new ParseFile("defaultimg.jpg", bytes, "image/jpeg");
 
                 ParseObject parseObject = new ParseObject("Plan");
+
+
                 parseObject.Add("nombre", plan.NombrePlan);
                 parseObject.Add("descripcion", plan.DescripcionPlan);
                 parseObject.Add("fecha", plan.FechaPlan + " " + plan.HoraPlan);
@@ -186,20 +192,17 @@ namespace PlansPop
                 ParseGeoPoint geoLugar = new ParseGeoPoint(ArgsLat, ArgsLon);
                 parseObject.Add("lugar", geoLugar);
 
-                if (direccion == null)
-                {
-                    parseObject.Add("direccion", dir);
+                parseObject.Add("direccion", dir);
 
-                }
-                else
+                if (crearLugar == 1)
                 {
-                    parseObject.Add("direccion", direccion);
 
                     ParseObject objectLugar = new ParseObject("Lugares");
-                    objectLugar.Add("nombre", direccion);
-                    objectLugar.Add("direccion", direccion);
+                    objectLugar.Add("nombre", dir);
+                    objectLugar.Add("direccion", dir);
                     objectLugar.Add("ubicacion", geoLugar);
                     await objectLugar.SaveAsync();
+                    crearLugar = -1;
                 }
 
                 try
@@ -213,9 +216,10 @@ namespace PlansPop
                 }
                 catch
                 {
-                    var dialog2 = new Windows.UI.Popups.MessageDialog("Error al crear el plan");
+                    var dialog2 = new Windows.UI.Popups.MessageDialog("Error al crear el plan, intentalo de nuevo");
                     dialog2.Commands.Add(new Windows.UI.Popups.UICommand("Aceptar") { Id = 1 });
-                    var result2 = await dialog.ShowAsync();
+                    var result2 = await dialog2.ShowAsync();
+                    progressRing.IsActive = false;
                 }
 
 

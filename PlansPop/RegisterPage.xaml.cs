@@ -7,6 +7,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,6 +26,9 @@ namespace PlansPop
     /// </summary>
     public sealed partial class RegisterPage : Page
     {
+        private StorageFile photo;
+        
+
         public RegisterPage()
         {
             this.InitializeComponent();
@@ -40,10 +45,8 @@ namespace PlansPop
         {
             string name_c = name.Text;
             string mail = email.Text;
-            string day = Fecha_Nacimiento.DayFormat;
-            string month = Fecha_Nacimiento.MonthFormat;
-            string year = Fecha_Nacimiento.YearFormat;
-            string fecha = day + "-" + month + "-" + year;
+            string fecha = Fecha_Nacimiento.Date.Day + "/" + Fecha_Nacimiento.Date.Month + "/" + Fecha_Nacimiento.Date.Year;
+           
             int s = sex.SelectedIndex;
             string sexo="";
             switch (s)
@@ -84,7 +87,23 @@ namespace PlansPop
                 {
                     PrgRing.Visibility = Visibility.Visible;
                     panel.Visibility = Visibility.Collapsed;
-                    var user = new ParseUser()
+                    if (photo == null)
+                    {
+                        var packageLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
+                        var assetsFolder = await packageLocation.GetFolderAsync("Assets");
+                        if (sexo.Equals("Mujer")){
+                            photo = await assetsFolder.GetFileAsync("mujer.jpg");
+                        }
+                        else {
+                            photo = await assetsFolder.GetFileAsync("hombre.jpg");
+                        }
+
+                    }
+                    
+                    
+                    var bytes = await GetBtyeFromFile(photo);
+                    ParseFile parseFile = new ParseFile(userr + ".jpg", bytes, "image/jpeg");
+                    ParseUser user = new ParseUser()
                     {
                         Username = userr,
                         Password = passs,
@@ -95,10 +114,16 @@ namespace PlansPop
                     user["name"] = name_c;
                     user["sex"] = sexo;
                     user["b_date"] = fecha;
+                    user.Add("photo", null);
 
                     await user.SignUpAsync();
+                    
                     PrgRing.Visibility = Visibility.Collapsed;
+                    user["photo"] = parseFile;
+                    await user.SaveAsync();
                     await ParseUser.LogInAsync(userr, passs);
+                    
+                    
                     Accept.Visibility = Visibility.Visible;
                     await Task.Delay(2000);
                     Frame rootFrame = Window.Current.Content as Frame;
@@ -147,6 +172,19 @@ namespace PlansPop
             var margin = panel.Margin;
             margin.Top = 0;
             panel.Margin = margin;
+        }
+        private async Task<byte[]> GetBtyeFromFile(StorageFile storageFile)
+        {
+            var stream = await storageFile.OpenReadAsync();
+
+            using (var dataReader = new DataReader(stream))
+            {
+                var bytes = new byte[stream.Size];
+                await dataReader.LoadAsync((uint)stream.Size);
+                dataReader.ReadBytes(bytes);
+
+                return bytes;
+            }
         }
     }
     

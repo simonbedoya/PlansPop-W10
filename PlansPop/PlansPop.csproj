@@ -130,12 +130,18 @@
     <Compile Include="Planes.xaml.cs">
       <DependentUpon>Planes.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProfilePage.xaml.cs">
+      <DependentUpon>ProfilePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="RemPassPage.xaml.cs">
       <DependentUpon>RemPassPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VerPlan.xaml.cs">
+      <DependentUpon>VerPlan.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -147,9 +153,12 @@
   <ItemGroup>
     <Content Include="Assets\bus.png" />
     <Content Include="Assets\fotoplan.jpg" />
+    <Content Include="Assets\hombre.jpg" />
     <Content Include="Assets\Logo_login.png" />
     <Content Include="Assets\Logo_photoshop.scale-100.png" />
     <Content Include="Assets\Logo_photoshop_gr.png" />
+    <Content Include="Assets\mujer.jpg" />
+    <Content Include="Assets\posicionPlan.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -196,11 +205,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ProfilePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="RegisterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RemPassPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="VerPlan.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

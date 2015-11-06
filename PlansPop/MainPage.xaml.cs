@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -31,7 +32,7 @@ namespace PlansPop
         {      
                   
             this.InitializeComponent();
-            CargarDatos();
+           
             MainFrame.Navigate(typeof(Planes));
         }
 
@@ -60,7 +61,9 @@ namespace PlansPop
 
 
                 }
+                CargarDatos();
                 return menuList;
+                
             }
             set { menuList = value; }
         }
@@ -133,6 +136,27 @@ namespace PlansPop
                 var user = ParseUser.CurrentUser;
                 name.Text = user.Get<String>("name");
                 email.Text = user.Email;
+                ParseFile file = user.Get<ParseFile>("photo");
+                Uri ur = file.Url;
+                BitmapImage img = new BitmapImage(ur);
+                image.ImageSource = img;
+        }
+
+        private void btn_profile(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(typeof(ProfilePage));
+        }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            string msg = e.Parameter as string;
+            if (msg == null)
+            {
+                MainFrame.Navigate(typeof(Planes));
+            }
+            else {
+                MainFrame.Navigate(typeof(ProfilePage));
+            }
+
         }
     }
 }
